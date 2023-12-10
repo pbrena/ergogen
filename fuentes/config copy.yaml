@@ -1,0 +1,228 @@
+units:
+  # Proiables Choc spaced board
+  # to adjust to an MX layout variables kx ky: u
+  kx: cx
+  ky: cy
+  # Padding Variables
+  px: kx + 4
+  py: ky + 4
+points:
+  key:
+    padding: 1ky
+    spread: 1kx
+  zones:
+    matrix:
+      anchor:
+        rotate: 31
+        shift: [100, -200]
+      columns:
+        outer:
+          rows:
+            # OJO Despues de row:
+            # ya son key specific por tanto
+            # NO se requiere key:
+            bottom:
+              rotate: 29
+              shift: [-19, 0]
+            home:
+              rotate: -29
+              shift: [35, 7]
+            top:
+              skip: true
+          key:
+            column_net: C0
+        pinky:
+          key:
+            stagger: 26
+            column_net: C1
+        ring:
+          key:
+            stagger: 11
+            origin: [-12, -9]
+            splay: -5
+            column_net: C2
+        middle:
+          key:
+            stagger: 9
+            column_net: C3
+        index:
+          key:
+            stagger: -10
+            column_net: C4
+        inner:
+          key:
+            stagger: -5
+            column_net: C5
+      rows:
+        # OJO Despues de row:
+        # ya son key specific por tanto
+        # NO se requiere key:
+        bottom:
+          row_net: R0
+        home:
+          row_net: R1
+        top:
+          row_net: R2
+    thumbfan:
+      anchor:
+        ref: matrix_inner_bottom
+        shift: [0, -21]
+      columns:
+        near:
+          key:
+            row_net: R0
+        home:
+          key:
+            stagger: -8
+            row_net: R1
+        far:
+          key:
+            stagger: -12
+            row_net: R2
+      rows:
+        thumb:
+          column_net: C6
+outlines:
+  raw:
+    - what: rectangle
+      where: true
+      size: [px, py]
+  keys:
+    - what: rectangle
+      where: true
+      size: [kx-0.5,ky-0.5]
+  board:
+    - what: polygon
+      operation: stack
+      points:
+        - ref: matrix_outer_bottom
+          shift: [-0.5px,0.5py]
+        - ref: matrix_outer_home
+          shift: [-0.49px,-1py]
+        - ref: matrix_outer_home
+          shift: [-0.5px,0.5py]
+        - ref: matrix_outer_home
+          shift: [0.33px,0.5py]
+        - ref: matrix_pinky_top
+          shift: [-0.5px,0.55py]
+        - ref: matrix_pinky_top
+          shift: [0.48px,0.55py]
+        - ref: matrix_ring_top
+          shift: [-0.5px,0.6py]
+        - ref: matrix_ring_top
+          shift: [0.3px,0.6py]
+        - ref: matrix_middle_top
+          shift: [-0.5px,0.65py]
+        - ref: matrix_middle_top
+          shift: [0.5px,0.65py]
+        - ref: matrix_index_top
+          shift: [0.25px,1.59py]
+        - ref: matrix_inner_top
+          shift: [0.75px,1.15py]
+        - ref: thumbfan_home_thumb
+          shift: [-0.1px,0.9py]
+        - ref: thumbfan_far_thumb
+          shift: [0.5px,0.5py]
+        - ref: thumbfan_far_thumb
+          shift: [0.5px,-0.5py]
+        - ref: thumbfan_far_thumb
+          shift: [-0.5px,-0.5py]
+        - ref: thumbfan_near_thumb
+          shift: [-0.5px,-0.5py]
+        - ref: matrix_middle_bottom
+          shift: [0.5px,-1py]
+        - ref: matrix_middle_bottom
+          shift: [-0.5px,-1py]
+        - ref: matrix_outer_bottom
+          shift: [0.5px,-0.5py]
+        - ref: matrix_outer_bottom
+          shift: [-0.5px,-0.5py]
+      fillet: 2
+  combo:
+    - name: board
+    - operation: subtract
+      name: keys
+pcbs:
+  pbergo38IzSngSizPcb:
+    outlines:
+      main:
+        outline: board
+    footprints:
+      choc_nohot:
+        what: chocModSngHol
+        where: true
+        params:
+          keycaps: true
+          reverse: false
+          hotswap: false
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      diode:
+        what: diodeTHonly
+        where: true
+        adjust:
+          shift: [0, -5]
+          rotate: 180
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+      db9:
+        what: db9hor
+        where:
+          ref: matrix_inner_top
+          shift: [-7,26]
+          rotate: 154
+        params:
+          P7: C0
+          P6: C1
+          P1: C2
+          P2: C3
+          P3: C4
+          P4: C5
+          P5: C6
+          P8: R0
+          P9: R1
+          PA: R2
+#      jstph:
+#        what: jstph
+#        where:
+#          ref: matrix_inner_top
+#          shift: [-35,40]
+#        params:
+#          pos: '+'
+#          neg: 'n'
+#       pico:
+#        what: pico
+#        params:
+#         orientation: "down"
+#        where:
+#          ref: matrix_inner_top
+#          shift: [-35,40]
+##      pad1:
+#        what: pad
+#        where:
+#          ref: matrix_inner_top
+#          shift: [-35,40]
+#        net: "GND"
+#        params:
+#          width: 3,
+#          height: 3,
+          #rotate: 154 en el db9
+#      xiao:
+#        what: xiao
+#        where:
+#          ref: matrix_inner_top
+#          shift: [-35,40]
+#     promicro:
+#        what: promicro_pretty
+#        where:
+#          ref: matrix_inner_top
+#          shift: [-35,40]
+      #promicro:
+        #what: promicro
+        #params:
+         #orientation: "down"
+        #where:
+          #ref: matrix_inner_top
+          #shift: [-35,40]
+          #rotate: 154 en el db9

@@ -1,0 +1,350 @@
+units:
+  # Proiables Choc spaced board
+  # to adjust to an MX layout variables kx ky: u
+  kx: cx
+  ky: cy
+  # Padding Variables
+  px: kx + 4
+  py: ky + 4
+points:
+  key:
+    padding: 1ky
+    spread: 1kx
+  zones:
+    matrix:
+      anchor:
+        rotate: -25
+        shift: [100, -150]
+      columns:
+        inner:
+          key:
+            column_net: C1
+        index:
+          key:
+            stagger: 4
+            column_net: C2
+        middle:
+          key:
+            stagger: 13
+            column_net: C3
+        ring:
+          key:
+            stagger: -2
+            origin: [-12, -9]
+            column_net: C4
+        pinky:
+          key:
+            stagger: -15
+            splay: -5
+            column_net: C5
+        outer:
+          rows:
+            # OJO Despues de row:
+            # ya son key specific por tanto
+            # NO se requiere key:
+            bottom:
+              # rotate: -29
+              # shift: [19, 0]
+              skip: true
+            home:
+            #   rotate: 29
+              shift: [0, 25]
+            # stagger: -3
+            top:
+              skip: true
+          key:
+            stagger: -25 # Modifica al home pues no hay top
+            column_net: C6
+      rows:
+        # OJO Despues de row:
+        # ya son key specific por tanto
+        # NO se requiere key:
+        bottom:
+          row_net: R5
+        home:
+          row_net: R4
+        top:
+          row_net: R3
+    thumbfan:
+      anchor:
+        ref: matrix_inner_bottom
+        shift: [-36, -40]
+      columns:
+        far:
+          key:
+            row_net: R3
+        home:
+          key:
+            stagger: 11
+            row_net: R4
+        near:
+          key:
+            stagger: 8
+            row_net: R5
+      rows:
+        thumb:
+          column_net: C0
+outlines:
+  raw:
+    - what: rectangle
+      where: true
+      size: [px, py]
+  keys:
+    - what: rectangle
+      where: true
+      size: [kx-0.5,ky-0.5]
+  board:
+    - what: polygon
+      operation: stack
+      points:
+        - ref: matrix_outer_home
+          shift: [1.95px,-1.75py] # antes de la esq inf der, arriba
+        - ref: matrix_outer_home
+          shift: [0.71px,-1py]
+        - ref: matrix_outer_home
+          shift: [0.7px,0.8py]
+        - ref: matrix_outer_home
+          shift: [-0.05px,0.8py]
+        - ref: matrix_pinky_top
+          shift: [0.75px,0.9py]
+        - ref: matrix_middle_top
+          shift: [1.8px,0.1py]
+        - ref: matrix_middle_top
+          shift: [1.8px,0.5py]
+        - ref: matrix_middle_top
+          shift: [2.95px,1.85py]
+        - ref: matrix_middle_top
+          shift: [2.2px,2.65py]
+        - ref: matrix_middle_top
+          shift: [-0.5px,2.65py]
+        - ref: matrix_index_top
+          shift: [0.25px,3.25py]   # cima derecha
+        - ref: matrix_index_top
+          shift: [-1.98py,2.22py]      # cima iz
+        - ref: matrix_index_top
+          shift: [-1.98py,0.5py]
+        - ref: matrix_index_top
+          shift: [-2.4px,.25py]    # antigua cima iz ultimo punto alto
+        - ref: matrix_index_top
+          shift: [-2.4px,-2.8py] #  1er punto bajo
+        - ref: thumbfan_far_thumb
+          shift: [-0.6px,0.5py]
+        - ref: thumbfan_far_thumb
+          shift: [-0.6px,-0.8py] #  esquina inferior izquierda
+        - ref: thumbfan_far_thumb
+          shift: [0.25px,-0.85py]
+        - ref: thumbfan_near_thumb
+          shift: [0.5px,-0.85py]
+        - ref: matrix_middle_bottom
+          shift: [-0.25px,-py]
+        - ref: matrix_middle_bottom
+          shift: [0.75px,-1py]
+        - ref: matrix_outer_home
+          shift: [1.5px,-2.7py] #  esquina inferior der
+      fillet: 2
+  combo:
+    - name: board
+    - operation: subtract
+      name: keys
+pcbs:
+  pbergo38DrV2SSPcb:
+    outlines:
+      main:
+        outline: board
+    footprints:
+      choc_nohot:
+        what: chocModSngHol
+        where: true
+        params:
+          keycaps: true
+          reverse: false
+          hotswap: false
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      diode:
+        what: diodeTHonly
+        where: true
+        adjust:
+          shift: [0, -5]
+          rotate: 180
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+      Led1:
+        what: rgb
+        where:
+          ref: matrix_index_top
+          shift: [-2px,-2.5py] #  basado en 1er punto bajo
+          rotate: -90
+        params:
+          side: B
+          VCC:  ledCtr
+          dout: GND
+          GND:  ledCtr
+          din:  V3
+      Led2:
+        what: rgb
+        where:
+          ref: matrix_index_top
+          shift: [-1.8px,-1py] #  basado en 1er punto bajo
+          rotate: -90
+        params:
+          side: B
+          VCC:  ledCtr
+          dout: GND
+          GND:  ledCtr
+          din:  V3
+      rotary1:
+        what: rotary
+        where:
+          ref: matrix_index_top
+          shift: [-1.9px,-1.9py] #  basado en 1er punto bajo
+          rotate: 0
+        params:
+          from: pR3
+          to: C6
+          A: E1PA
+          B: E1PB
+          C: GND
+      diodeRot1:
+        what: diodeTHonly
+        where:
+          ref: matrix_index_top
+          shift: [-1.9px,-1.9py] #  basado en 1er punto bajo
+          rotate: 180+90
+        adjust:
+          shift: [-5, 5]
+        params:
+          from: pR3
+          to: R3
+      rotary2:
+        what: rotary
+        where:
+          ref: matrix_index_top
+          shift: [-1.7px,-0.25py] #  basado en 1er punto bajo
+          rotate: 0
+        params:
+          from: C0
+          to: pR0
+          A: E2PA
+          B: E2PB
+          C: GND
+      diodeRot2:
+        what: diodeTHonly
+        where:
+          ref: matrix_index_top
+          shift: [-1.7px,-0.25py] #  basado en 1er punto bajo
+          rotate: -60
+        adjust:
+          shift: [3, 3]
+        params:
+          from: pR0
+          to: R0
+      db9:
+        what: db9hor
+        where:
+          ref: matrix_inner_top
+          shift: [-2,2.1py]
+          rotate: 180+25
+        params:
+          P7: C0
+          P6: C1
+          P1: C2
+          P2: C3
+          P3: C4
+          P4: C5
+          P5: C6
+          P8: R2
+          P9: R1
+          PA: R0
+      pico:
+        what: RPi_Pico
+        where:
+          ref: matrix_middle_top
+          shift: [0.5px,1.25py]
+          rotate: -90
+        params:
+          GP4:   SDA
+          GP5:   SCL
+          GP9:   E2PB
+          GP10:  E2PA
+          GP11:  E1PB
+          GP12:  E1PA
+          GP13:  R2
+          GP14:  R1
+          GP15:  R0
+          GP16:  R5
+          GP17:  R4
+          GP18:  R3
+          GP19:  C0
+          GP20:  C1
+          GP21:  C2
+          GP22:  C3
+          GP26:  C4
+          GP27:  C5
+          GP28:  C6
+          GND:   GND
+          V3:    V3
+          VBUS:  VBUS
+          tp1jpr: GND
+          tp2jpr: usbDM
+          tp3jpr: usbDP
+      usba:
+        what: usba
+        where:
+          ref: matrix_middle_top
+          shift: [1px,2py]
+          rotate: 180
+        params:
+          P1: SDA
+          P2: SCL
+          P3: GND
+          P4: V3
+      usbb:
+        what: usbb
+        where:
+          ref: matrix_middle_top
+          shift: [2.1px,1.70py]
+          rotate: 45
+        params:
+          P1: VBUS
+          P2: usbDM
+          P3: usbDP
+          P4: GND
+      rotary3:
+        what: rotary
+        where:
+          ref: matrix_outer_home
+          shift: [1.3px,-2py]
+          rotate: 180-27
+        params:
+          from: pR5
+          to: C6
+          A: E3PA
+          B: E3PB
+          C: GND
+      diodeRot3:
+        what: diodeTHonly
+        where:
+          ref: matrix_outer_home
+          shift: [1.3px,-2py]
+          rotate: 0-27
+        adjust:
+          shift: [-11, -2.75]
+        params:
+          from: pR5
+          to: R5
+
+#      jstph:
+#        what: jstph
+#        where:
+#          ref: matrix_inner_top
+#          shift: [-35,40]
+#        params:
+#          pos: '+'
+#          neg: 'n'
+#      xiao:
+#        what: xiao
+#        where:
+#          ref: matrix_inner_top
+#          shift: [-35,40]

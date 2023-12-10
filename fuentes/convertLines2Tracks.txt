@@ -1,0 +1,13 @@
+https://forum.kicad.info/t/converting-lines-to-tracks/41076
+
+Can be done with Kicad 7.
+Select a whole area using mouse (Hold left button down to form an area) or left click individual lines whilst holdig down cmd key.
+
+When selection complete:
+Right mouse click / Create from Selection / Create tracks from selection / then select layer from Pop-up.
+
+The tracks now exist under the still showing graphic lines. Move or delete the graphic lines to see the tracks.
+
+There is also a function for this in the Hot Key list in Preferences / Preferences in the PCB area.
+
+There are a lot of features in the Right Mouse Click Select menu.
