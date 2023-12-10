@@ -1,6 +1,26 @@
 
 # Ergogen
 
+Comandos locales
+
+Para instalar se uso:
+
+ brew install node
+ npm i -g ergogen
+
+para usar el comando `ergogen` que utilize los footprint locales se cambia al folder donde se encuentra la configuracion, que debe llamarse: config.yaml
+
+cd ../pbergo40Iz
+cd ../pbergo40Der
+ergogen . 
+
+https://flatfootfox.com/ergogen-part4-footprints-cases/
+
+The trick here is that mountinghole.js isn't in the Ergogen GitHub repository. It's part of our local project folder. Thankfully we don't need to use any special syntax as long as we place the footprint files in the correct location. Without further ado, let's fire up Ergogen and provide it with our project folder.
+
+ergogen .
+
+
 ***Ergonomic Keyboard Generator***
 
 <br>
